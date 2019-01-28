@@ -16,6 +16,7 @@ while True:
         s.start()
         break
     elif choice == "t":
-        print("not yet setup")
+        s = Start("parametric", choice)
+        s.start()
     else:
         print("Not a valid Grapher!")

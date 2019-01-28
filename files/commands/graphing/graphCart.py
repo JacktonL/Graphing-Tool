@@ -8,7 +8,7 @@ class GraphCart(Graph):
     def __init__(self, size):
         Graph.__init__(self, size)
 
-    def draw(self, expr):
+    def draw(self, expr1):
 
         plist = []
 
@@ -16,7 +16,7 @@ class GraphCart(Graph):
 
         size = self.size
 
-        temp = expr
+        temp = expr1
 
         win = Graph.window(self)
 

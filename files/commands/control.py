@@ -2,6 +2,7 @@ from .size import Size
 from .radians import radians
 from .graphing import GraphPolar
 from .graphing import GraphCart
+from .graphing import GraphPara
 from time import sleep
 
 
@@ -13,7 +14,9 @@ class Commands:
 
     isQuit = False
 
-    expr = 0
+    expr1 = 0
+
+    expr2 = 0
 
     command_list = 'help setsize expr graph quit'.split()
 
@@ -46,21 +49,37 @@ class Commands:
                 print("Oops!  That was not a valid number.  Try again...")
 
     def expression(self):
+        if self.tool_set == "t":
+            expr_stringx = input("Enter your X expression: ")
+            expr_stringy = input("Enter your Y expression: ")
+            print("Your expression X is set to {}".format(expr_stringx))
+            print("Your expression Y is set to {}".format(expr_stringy))
 
-        expr_string = input("Enter your expression: ")
-        print("Your expression is set to {}".format(expr_string))
-        expr_string = radians(expr_string)
-        Commands.expr = expr_string
-        Commands.expr_set = True
+            expr_string1 = radians(expr_stringx)
+            expr_string2 = radians(expr_stringy)
+
+            Commands.expr1 = expr_string1
+            Commands.expr2 = expr_string2
+            Commands.expr_set = True
+
+        else:
+            expr_string = input("Enter your expression: ")
+            print("Your expression is set to {}".format(expr_string))
+            expr_string = radians(expr_string)
+            Commands.expr1 = expr_string
+            Commands.expr_set = True
 
     def graph(self):
         s = Size()
         if self.tool_set == 'p':
             graph = GraphPolar(s.getsize())
-            graph.draw(Commands.expr)
+            graph.draw(Commands.expr1)
         elif self.tool_set == 'c':
             graph = GraphCart(s.getsize())
-            graph.draw(Commands.expr)
+            graph.draw(Commands.expr1)
+        elif self.tool_set == "t":
+            graph = GraphPara(s.getsize())
+            graph.draw(Commands.expr1, Commands.expr2)
 
     def quit(self):
         self.isQuit = True
