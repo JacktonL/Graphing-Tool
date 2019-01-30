@@ -3,6 +3,7 @@ from .radians import radians
 from .graphing import GraphPolar
 from .graphing import GraphCart
 from .graphing import GraphPara
+from .graphing import Derivative
 from time import sleep
 
 
@@ -12,13 +13,15 @@ class Commands:
 
     expr_set = False
 
+    derv_set = False
+
     isQuit = False
 
     expr1 = 0
 
     expr2 = 0
 
-    command_list = 'help setsize expr graph quit'.split()
+    command_list = 'help setsize expr derv graph quit'.split()
 
     def __init__(self, comm):
         self.comm = comm
@@ -69,6 +72,27 @@ class Commands:
             Commands.expr1 = expr_string
             Commands.expr_set = True
 
+    def differentiate(self):
+
+        expr_string = input("Enter a value to differentiate at: ")
+
+        if self.expr_set:
+            try:
+                if self.tool_set == 't':
+                    diff = Derivative(self.expr1, self.expr2, float(expr_string))
+                    self.derv_set = True
+                elif self.tool_set == 'p':
+                    diff = Derivative(self.expr1+"*cos(x)", self.expr1+"*sin(x)", float(expr_string))
+                    self.derv_set = False
+                else:
+                    diff = Derivative(self.expr1, "x", float(expr_string))
+
+                print("The slope at {} is: {}".format(expr_string, diff.string()))
+            except ValueError:
+                print("Enter a number to differentiate")
+        else:
+            print("Set an expression to differentiate")
+
     def graph(self):
         s = Size()
         if self.tool_set == 'p':
@@ -102,6 +126,9 @@ class Commands:
                 Commands.graph(self)
             else:
                 print("You have not set an expression")
+
+        elif self.comm == 'derv':
+            Commands.differentiate(self)
 
         elif self.comm == 'quit':
             Commands.quit(self)
