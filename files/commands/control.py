@@ -17,9 +17,9 @@ class Commands:
 
     isQuit = False
 
-    expr1 = 0
+    expr1 = ""
 
-    expr2 = 0
+    expr2 = ""
 
     command_list = 'help setsize expr derv graph quit'.split()
 
@@ -76,22 +76,21 @@ class Commands:
 
         expr_string = input("Enter a value to differentiate at: ")
 
-        if self.expr_set:
-            try:
-                if self.tool_set == 't':
-                    diff = Derivative(self.expr1, self.expr2, float(expr_string))
-                    self.derv_set = True
-                elif self.tool_set == 'p':
-                    diff = Derivative(self.expr1+"*cos(x)", self.expr1+"*sin(x)", float(expr_string))
-                    self.derv_set = False
-                else:
-                    diff = Derivative(self.expr1, "x", float(expr_string))
+        try:
+            if self.tool_set == 't':
+                diff = Derivative(self.expr1, self.expr2, float(expr_string))
+                self.derv_set = True
+            elif self.tool_set == 'p':
+                diff = Derivative(self.expr1+"*cos(x)", self.expr1+"*sin(x)", float(expr_string))
+                self.derv_set = True
+            else:
+                diff = Derivative("x", self.expr1, float(expr_string))
+                self.derv_set = True
+                diff.graph()
 
-                print("The slope at {} is: {}".format(expr_string, diff.string()))
-            except ValueError:
-                print("Enter a number to differentiate")
-        else:
-            print("Set an expression to differentiate")
+            print("The slope at {} is: {}".format(expr_string, diff.string()))
+        except ValueError:
+            print("Enter a number to differentiate")
 
     def graph(self):
         s = Size()
@@ -128,7 +127,9 @@ class Commands:
                 print("You have not set an expression")
 
         elif self.comm == 'derv':
-            Commands.differentiate(self)
-
+            if self.expr_set:
+                Commands.differentiate(self)
+            else:
+                print("You have not set an expression")
         elif self.comm == 'quit':
             Commands.quit(self)

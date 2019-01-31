@@ -14,11 +14,15 @@ class Graph:
         win = GraphWin("Graph", size, size)
         return win
 
+    def getSize(self):
+
+        return self.size
+
     def drawAxis(self, win):
 
         size = self.size
 
-        half = int(size / 2)
+        half = float(size / 2)
 
         px1 = Point(0, half)
         px2 = Point(size, half)

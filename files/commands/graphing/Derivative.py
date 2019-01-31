@@ -1,4 +1,6 @@
 from sympy import symbols, diff, sympify
+from .Graph import Graph
+from graphics import Line
 
 
 class Derivative:
@@ -16,21 +18,36 @@ class Derivative:
         expry = diff(self.expry, x)
         exprx = diff(self.exprx, x)
 
-        top = expry.subs(x, float(self.point))
-        bottom = exprx.subs(x, float(self.point))
+        top = expry.evalf(subs={x: float(self.point)})
+        bottom = exprx.evalf(subs={x: float(self.point)})
 
         return top/bottom
 
     def slope(self):
 
-        neg = -800*Derivative.value(self) + (self.expry.subs("x", self.point) - -800*Derivative.value(self))
+        graph = Graph(self)
+        half = float(graph.getSize()/2)
 
-        pos = 800*Derivative.value(self) + (self.expry.subs("x", self.point) - 800*Derivative.value(self))
+        neg = -half*Derivative.value(self) + (self.expry.subs("x", self.point) - -half*Derivative.value(self))
+
+        pos = half*Derivative.value(self) + (self.expry.subs("x", self.point) - half*Derivative.value(self))
 
         return neg, pos
 
     def string(self):
 
         x = symbols("x")
-        expr = self.expry.subs("x", x)
-        return "y = {}x + {}".format(Derivative.value, expr.subs("x", self.point))
+        expr = sympify(self.expry)
+        der = diff(expr)
+        return "y = {}x + {}".format(Derivative.value(self),
+                                     expr.evalf(subs={x: self.point}) - self.point*der.evalf(subs={x: self.point}))
+
+    def graph(self):
+
+        graph = Graph(self)
+        win = graph.window()
+        half = float(graph.getSize()/2)
+
+        line = Line(half + Derivative.slope(self)[0], Derivative.slope(self)[1])
+
+        line.draw(win)
