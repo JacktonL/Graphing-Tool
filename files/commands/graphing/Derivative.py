@@ -1,12 +1,13 @@
 from sympy import symbols, diff, sympify
 from .Graph import Graph
-from graphics import Line
+from graphics import Line, Point
+from .graphCart import GraphCart
 
 
-class Derivative:
+class Derivative(Graph):
 
-    def __init__(self, exprx, expry, point):
-
+    def __init__(self, size, exprx, expry, point):
+        Graph.__init__(self, size)
         self.exprx = exprx
         self.expry = expry
         self.point = point
@@ -25,12 +26,14 @@ class Derivative:
 
     def slope(self):
 
-        graph = Graph(self)
-        half = float(graph.getSize()/2)
+        half = float(Graph.getSize(self)/2)
+        expr = sympify(self.expry)
+        der = diff(expr)
+        x = symbols("x")
 
-        neg = -half*Derivative.value(self) + (self.expry.subs("x", self.point) - -half*Derivative.value(self))
+        neg = -half*Derivative.value(self) + (expr.evalf(subs={x: self.point}) - self.point*der.evalf(subs={x: self.point}))
 
-        pos = half*Derivative.value(self) + (self.expry.subs("x", self.point) - half*Derivative.value(self))
+        pos = half*Derivative.value(self) + (expr.evalf(subs={x: self.point}) - self.point*der.evalf(subs={x: self.point}))
 
         return neg, pos
 
@@ -39,15 +42,19 @@ class Derivative:
         x = symbols("x")
         expr = sympify(self.expry)
         der = diff(expr)
-        return "y = {}x + {}".format(Derivative.value(self),
-                                     expr.evalf(subs={x: self.point}) - self.point*der.evalf(subs={x: self.point}))
+        print("Equation of tangent:" " y = {}x + {}".format(Derivative.value(self),
+                                     expr.evalf(subs={x: self.point}) - self.point*der.evalf(subs={x: self.point})))
 
     def graph(self):
 
-        graph = Graph(self)
-        win = graph.window()
-        half = float(graph.getSize()/2)
+        half = int(Graph.getSize(self)/2)
 
-        line = Line(half + Derivative.slope(self)[0], Derivative.slope(self)[1])
+        p1 = Point(0, half - Derivative.slope(self)[0])
+        p2 = Point(Graph.getSize(self), half - Derivative.slope(self)[1])
 
-        line.draw(win)
+        line = Line(p1, p2)
+
+        return line
+
+
+

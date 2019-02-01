@@ -9,6 +9,8 @@ from time import sleep
 
 class Commands:
 
+    size = Size()
+
     tool_set = 0
 
     expr_set = False
@@ -21,7 +23,7 @@ class Commands:
 
     expr2 = ""
 
-    command_list = 'help setsize expr derv graph quit'.split()
+    command_list = 'help setsize expr graph tang quit'.split()
 
     def __init__(self, comm):
         self.comm = comm
@@ -78,30 +80,29 @@ class Commands:
 
         try:
             if self.tool_set == 't':
-                diff = Derivative(self.expr1, self.expr2, float(expr_string))
+                diff = Derivative(self.size.getsize(), self.expr1, self.expr2, float(expr_string))
                 self.derv_set = True
             elif self.tool_set == 'p':
-                diff = Derivative(self.expr1+"*cos(x)", self.expr1+"*sin(x)", float(expr_string))
+                diff = Derivative(self.size.getsize(), self.expr1+"*cos(x)", self.expr1+"*sin(x)", float(expr_string))
                 self.derv_set = True
             else:
-                diff = Derivative("x", self.expr1, float(expr_string))
+                graph = GraphCart(self.size.getsize())
+                tang = Derivative(self.size.getsize(), 'x', self.expr1, float(expr_string))
+                graph.draw(Commands.expr1, tang)
                 self.derv_set = True
-                diff.graph()
 
-            print("The slope at {} is: {}".format(expr_string, diff.string()))
         except ValueError:
             print("Enter a number to differentiate")
 
     def graph(self):
-        s = Size()
         if self.tool_set == 'p':
-            graph = GraphPolar(s.getsize())
+            graph = GraphPolar(self.size.getsize())
             graph.draw(Commands.expr1)
         elif self.tool_set == 'c':
-            graph = GraphCart(s.getsize())
+            graph = GraphCart(self.size.getsize())
             graph.draw(Commands.expr1)
         elif self.tool_set == "t":
-            graph = GraphPara(s.getsize())
+            graph = GraphPara(self.size.getsize())
             graph.draw(Commands.expr1, Commands.expr2)
 
     def quit(self):
@@ -126,7 +127,7 @@ class Commands:
             else:
                 print("You have not set an expression")
 
-        elif self.comm == 'derv':
+        elif self.comm == 'tang':
             if self.expr_set:
                 Commands.differentiate(self)
             else:

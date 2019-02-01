@@ -28,7 +28,7 @@ class GraphPara(Graph):
 
         half = int(size / 2)
 
-        for i in range(-800, 800):
+        for i in range(-half, half):
 
             expr1 = temp1
 

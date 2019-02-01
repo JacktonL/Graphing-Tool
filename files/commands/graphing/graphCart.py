@@ -8,7 +8,7 @@ class GraphCart(Graph):
     def __init__(self, size):
         Graph.__init__(self, size)
 
-    def draw(self, expr1):
+    def draw(self, expr1, tang=False):
 
         plist = []
 
@@ -43,6 +43,10 @@ class GraphCart(Graph):
                     line.draw(win)
             except TypeError:
                 pass
+
+        if tang:
+            tang.graph().draw(win)
+            tang.string()
 
         win.getMouse()
         win.close()
