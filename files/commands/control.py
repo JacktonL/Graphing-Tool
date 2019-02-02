@@ -5,25 +5,21 @@ from .graphing import GraphCart
 from .graphing import GraphPara
 from .graphing import Derivative
 from time import sleep
+from sympy import sympify
 
 
 class Commands:
 
     size = Size()
-
     tool_set = 0
-
     expr_set = False
-
     derv_set = False
-
     isQuit = False
-
     expr1 = ""
-
     expr2 = ""
+    scale_value = "1"
 
-    command_list = 'help setsize expr graph tang quit'.split()
+    command_list = 'help setsize scale expr graph tang quit'.split()
 
     def __init__(self, comm):
         self.comm = comm
@@ -52,6 +48,19 @@ class Commands:
                 break
             except ValueError:
                 print("Oops!  That was not a valid number.  Try again...")
+
+    def scale(self):
+
+        scale_value = input("Enter a value to scale by: ")
+
+        try:
+            scale_value = sympify(scale_value)
+            float(scale_value)
+            Commands.scale_value = str(scale_value)
+            print("Scale set to {}".format(Commands.scale_value))
+        except TypeError:
+            print("Cannot scale by {}".format(scale_value))
+            print("Enter an expression or number to scale")
 
     def expression(self):
         if self.tool_set == "t":
@@ -87,7 +96,7 @@ class Commands:
                 self.derv_set = True
             else:
                 graph = GraphCart(self.size.getsize())
-                tang = Derivative(self.size.getsize(), 'x', self.expr1, float(expr_string))
+                tang = Derivative(self.size.getsize(), 'x', self.expr1, expr_string)
                 graph.draw(Commands.expr1, tang)
                 self.derv_set = True
 
@@ -100,7 +109,7 @@ class Commands:
             graph.draw(Commands.expr1)
         elif self.tool_set == 'c':
             graph = GraphCart(self.size.getsize())
-            graph.draw(Commands.expr1)
+            graph.draw(Commands.expr1+"*"+self.scale_value)
         elif self.tool_set == "t":
             graph = GraphPara(self.size.getsize())
             graph.draw(Commands.expr1, Commands.expr2)
@@ -117,6 +126,9 @@ class Commands:
 
         elif self.comm == 'setsize':
             Commands.thesize(self)
+
+        elif self.comm == 'scale':
+            Commands.scale(self)
 
         elif self.comm == 'expr':
             Commands.expression(self)

@@ -10,7 +10,7 @@ class Derivative(Graph):
         Graph.__init__(self, size)
         self.exprx = exprx
         self.expry = expry
-        self.point = point
+        self.point = sympify(point)
 
     def value(self):
 
@@ -31,9 +31,11 @@ class Derivative(Graph):
         der = diff(expr)
         x = symbols("x")
 
-        neg = -half*Derivative.value(self) + (expr.evalf(subs={x: self.point}) - self.point*der.evalf(subs={x: self.point}))
+        neg = -half*Derivative.value(self) + (expr.evalf(subs={x: self.point}) -
+                                              self.point*der.evalf(subs={x: self.point}))
 
-        pos = half*Derivative.value(self) + (expr.evalf(subs={x: self.point}) - self.point*der.evalf(subs={x: self.point}))
+        pos = half*Derivative.value(self) + (expr.evalf(subs={x: self.point}) -
+                                             self.point*der.evalf(subs={x: self.point}))
 
         return neg, pos
 
