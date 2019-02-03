@@ -41,9 +41,9 @@ class Derivative(Graph):
         x = symbols("x")
         exprx = sympify(self.exprx)
         expry = sympify(self.expry)
-        print("Equation of tangent:" " y = {}x + {}".format(Derivative.value(self),
-                                                            expry.evalf(subs={x: self.point}) -
-                                                            exprx.evalf(subs={x: self.point})*Derivative.value(self)))
+        print("Equation of tangent: y = {}x + {}".format(Derivative.value(self),
+                                                         expry.evalf(subs={x: self.point}) -
+                                                         exprx.evalf(subs={x: self.point})*Derivative.value(self)))
 
     def graph(self):
 

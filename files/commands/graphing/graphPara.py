@@ -1,9 +1,6 @@
 from .Graph import Graph
 from sympy import *
 from graphics import *
-from math import *
-from math import radians as rad
-
 
 class GraphPara(Graph):
 
