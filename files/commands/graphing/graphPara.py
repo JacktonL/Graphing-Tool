@@ -10,7 +10,7 @@ class GraphPara(Graph):
     def __init__(self, size):
         Graph.__init__(self, size)
 
-    def draw(self, expr1, expr2):
+    def draw(self, expr1, expr2, tang=False):
 
         plist = []
 
@@ -52,6 +52,10 @@ class GraphPara(Graph):
                     line.draw(win)
             except TypeError:
                 pass
+
+        if tang:
+            tang.graph().draw(win)
+            tang.string()
 
         win.getMouse()
         win.close()

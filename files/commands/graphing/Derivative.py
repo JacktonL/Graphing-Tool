@@ -1,7 +1,6 @@
 from sympy import symbols, diff, sympify
 from .Graph import Graph
 from graphics import Line, Point
-from .graphCart import GraphCart
 
 
 class Derivative(Graph):
@@ -27,25 +26,24 @@ class Derivative(Graph):
     def slope(self):
 
         half = float(Graph.getSize(self)/2)
-        expr = sympify(self.expry)
-        der = diff(expr)
+        expry = sympify(self.expry)
+        exprx = sympify(self.exprx)
         x = symbols("x")
 
-        neg = -half*Derivative.value(self) + (expr.evalf(subs={x: self.point}) -
-                                              self.point*der.evalf(subs={x: self.point}))
+        neg = expry.evalf(subs={x: self.point}) + Derivative.value(self)*(-half - exprx.evalf(subs={x: self.point}))
 
-        pos = half*Derivative.value(self) + (expr.evalf(subs={x: self.point}) -
-                                             self.point*der.evalf(subs={x: self.point}))
+        pos = expry.evalf(subs={x: self.point}) + Derivative.value(self)*(half - exprx.evalf(subs={x: self.point}))
 
         return neg, pos
 
     def string(self):
 
         x = symbols("x")
-        expr = sympify(self.expry)
-        der = diff(expr)
+        exprx = sympify(self.exprx)
+        expry = sympify(self.expry)
         print("Equation of tangent:" " y = {}x + {}".format(Derivative.value(self),
-                                     expr.evalf(subs={x: self.point}) - self.point*der.evalf(subs={x: self.point})))
+                                                            expry.evalf(subs={x: self.point}) -
+                                                            exprx.evalf(subs={x: self.point})*Derivative.value(self)))
 
     def graph(self):
 

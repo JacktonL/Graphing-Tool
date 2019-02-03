@@ -62,6 +62,10 @@ class Commands:
             print("Cannot scale by {}".format(scale_value))
             print("Enter an expression or number to scale")
 
+    def true_expression(self):
+
+        return self.expr1+"*"+self.scale_value, self.expr2+"*"+self.scale_value
+
     def expression(self):
         if self.tool_set == "t":
             expr_stringx = input("Enter your X expression: ")
@@ -72,15 +76,15 @@ class Commands:
             expr_string1 = radians(expr_stringx)
             expr_string2 = radians(expr_stringy)
 
-            Commands.expr1 = expr_string1
-            Commands.expr2 = expr_string2
+            Commands.expr1 = "("+expr_string1+")"
+            Commands.expr2 = "("+expr_string2+")"
             Commands.expr_set = True
 
         else:
             expr_string = input("Enter your expression: ")
             print("Your expression is set to {}".format(expr_string))
             expr_string = radians(expr_string)
-            Commands.expr1 = expr_string
+            Commands.expr1 = "("+expr_string+")"
             Commands.expr_set = True
 
     def differentiate(self):
@@ -89,15 +93,24 @@ class Commands:
 
         try:
             if self.tool_set == 't':
-                diff = Derivative(self.size.getsize(), self.expr1, self.expr2, float(expr_string))
+                graph = GraphPara(self.size.getsize())
+                tang = Derivative(self.size.getsize(),
+                                  Commands.true_expression(self)[0],
+                                  Commands.true_expression(self)[1], expr_string)
+                graph.draw(Commands.true_expression(self)[0], Commands.true_expression(self)[1], tang)
                 self.derv_set = True
+
             elif self.tool_set == 'p':
-                diff = Derivative(self.size.getsize(), self.expr1+"*cos(x)", self.expr1+"*sin(x)", float(expr_string))
+                graph = GraphPolar(self.size.getsize())
+                tang = Derivative(self.size.getsize(),
+                                  Commands.true_expression(self)[0]+"*cos(rad(x))",
+                                  Commands.true_expression(self)[0]+"*sin(rad(x))", expr_string)
+                graph.draw(Commands.true_expression(self)[0], tang)
                 self.derv_set = True
             else:
                 graph = GraphCart(self.size.getsize())
-                tang = Derivative(self.size.getsize(), 'x', self.expr1, expr_string)
-                graph.draw(Commands.expr1, tang)
+                tang = Derivative(self.size.getsize(), 'x', Commands.true_expression(self)[0], expr_string)
+                graph.draw(Commands.true_expression(self)[0], tang)
                 self.derv_set = True
 
         except ValueError:
@@ -106,13 +119,13 @@ class Commands:
     def graph(self):
         if self.tool_set == 'p':
             graph = GraphPolar(self.size.getsize())
-            graph.draw(Commands.expr1)
+            graph.draw(Commands.true_expression(self)[0])
         elif self.tool_set == 'c':
             graph = GraphCart(self.size.getsize())
-            graph.draw(Commands.expr1+"*"+self.scale_value)
+            graph.draw(Commands.true_expression(self)[0])
         elif self.tool_set == "t":
             graph = GraphPara(self.size.getsize())
-            graph.draw(Commands.expr1, Commands.expr2)
+            graph.draw(Commands.true_expression(self)[0], Commands.true_expression(self)[1])
 
     def quit(self):
         self.isQuit = True

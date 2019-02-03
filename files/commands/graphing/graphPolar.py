@@ -10,20 +10,14 @@ class GraphPolar(Graph):
     def __init__(self, size):
         Graph.__init__(self, size)
 
-    def draw(self, expr1):
+    def draw(self, expr1, tang=False):
 
         plist = []
-
         j = 0
-
         size = self.size
-
         temp = expr1
-
         win = Graph.window(self)
-
         Graph.drawAxis(self, win)
-
         half = int(size / 2)
 
         for i in range(1000):
@@ -36,14 +30,18 @@ class GraphPolar(Graph):
 
             expr = expr.evalf(subs={x: i})
             try:
-                point = Point(expr*cos(rad(i)) + half, half - expr*sin(rad(i)))
+                point = Point(expr * cos(rad(i)) + half, half - expr * sin(rad(i)))
                 plist.append(point)
                 if len(plist) > 1:
-                    line = Line(plist[j], plist[j+1])
+                    line = Line(plist[j], plist[j + 1])
                     j += 1
                     line.draw(win)
             except TypeError:
                 pass
+
+        if tang:
+            tang.graph().draw(win)
+            tang.string()
 
         win.getMouse()
         win.close()
