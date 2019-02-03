@@ -91,6 +91,9 @@ class Commands:
 
         expr_string = input("Enter a value to differentiate at: ")
 
+        if "pi" in expr_string:
+            expr_string.replace("pi", "3.14159265")
+
         try:
             if self.tool_set == 't':
                 graph = GraphPara(self.size.getsize())
