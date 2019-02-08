@@ -1,6 +1,7 @@
 from .Graph import Graph
 from sympy import *
 from graphics import *
+import time
 
 class GraphPara(Graph):
 
@@ -50,9 +51,10 @@ class GraphPara(Graph):
             except TypeError:
                 pass
 
-        if tang:
+        if tang and not anim:
             tang.graph().draw(win)
             tang.string()
+
 
         win.getMouse()
         win.close()

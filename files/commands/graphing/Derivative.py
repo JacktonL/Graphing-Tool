@@ -45,6 +45,12 @@ class Derivative(Graph):
                                                          expry.evalf(subs={x: self.point}) -
                                                          exprx.evalf(subs={x: self.point})*Derivative.value(self)))
 
+    def animation(self):
+
+        pass
+
+
+
     def graph(self):
 
         half = int(Graph.getSize(self)/2)

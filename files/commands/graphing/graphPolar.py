@@ -10,27 +10,34 @@ class GraphPolar(Graph):
     def __init__(self, size):
         Graph.__init__(self, size)
 
-    def draw(self, expr1, tang=False):
+    def draw(self, expr1, expr2, tang=False):
 
         plist = []
         j = 0
         size = self.size
-        temp = expr1
+        temp1 = expr1
+        temp2 = expr2
         win = Graph.window(self)
         Graph.drawAxis(self, win)
         half = int(size / 2)
 
         for i in range(1000):
 
-            expr = temp
+            expr1 = temp1
 
-            expr = sympify(expr)
+            expr2 = temp2
+
+            expr1 = sympify(expr1)
+
+            expr2 = sympify(expr2)
 
             x = symbols('x')
 
-            expr = expr.evalf(subs={x: i})
+            expr1 = expr1.evalf(subs={x: i})
+
+            expr2 = expr2.evalf(subs={x: i})
             try:
-                point = Point(expr * cos(rad(i)) + half, half - expr * sin(rad(i)))
+                point = Point(expr1 + half, half - expr2)
                 plist.append(point)
                 if len(plist) > 1:
                     line = Line(plist[j], plist[j + 1])
